@@ -1,3 +1,4 @@
+//nimmt das erste file was hochgeladen ist und gibt es zurück.
 export async function handleInput() {
 const fileInput=document.getElementById("fileInput");
 const file = fileInput.files[0];
