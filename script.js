@@ -1,7 +1,7 @@
  import {handleInput} from "./input.js";
  import { loadChat,clearChat,saveChat } from "./storage.js";
  import { SYSTEM_PROMPT } from "./prompt.js";
- import { downloadResult } from "./downloadresults.js";
+ import { downloadResult,downloadCSV } from "./downloadresults.js";
  let latestResult = null;
  const webhookUrl = "http://10.204.18.32:8102/webhook/8781f1b4-f353-4bc9-a096-0bd4cd4441eb";  
  
@@ -64,3 +64,4 @@ try {
 document.getElementById("clearBtn").addEventListener("click", clearChat);
 document.getElementById("sendBtn").addEventListener("click", send);
 document.getElementById("downloadBtn").addEventListener("click",()=> downloadResult(latestResult));
+document.getElementById("downloadBtncsv").addEventListener("click",()=> downloadCSV(latestResult));
