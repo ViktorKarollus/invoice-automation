@@ -1,13 +1,15 @@
  import {handleInput} from "./input.js";
- import { loadChat,clearChat,saveChat } from "./storage.js";
+ import { loadChat,clearChat,saveChat,saveinvoice,loadinvoice} from "./storage.js";
  import { SYSTEM_PROMPT } from "./prompt.js";
  import { downloadResult,downloadCSV } from "./downloadresults.js";
+ import { renderInvoices } from "./invoicecards.js";
  let latestResult = null;
  const webhookUrl = "http://10.204.18.32:8102/webhook/8781f1b4-f353-4bc9-a096-0bd4cd4441eb";  
  
  // Beim Laden der Seite alten Chat wiederherstellen
 window.onload = () => {
   document.getElementById("chat").innerHTML = loadChat();
+  document.getElementById("invoiceContainer").innerHTML =loadinvoice();
 };
  async function send() {
       const chat = document.getElementById("chat");
@@ -43,6 +45,8 @@ chat.innerHTML += `
 try {
   parsedReply = JSON.parse(rawReply);
   latestResult = parsedReply;
+  renderInvoices(parsedReply.invoices);
+  saveinvoice();
 } catch (error) {
   parsedReply = {
     error: "Response was not valid JSON",
