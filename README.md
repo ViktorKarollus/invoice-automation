@@ -1,4 +1,4 @@
-# AI Invoice Processing Dashboard
+# AI Invoice Processing Agent
 
 ## Overview
 
