@@ -1,6 +1,6 @@
  import {handleInput} from "./input.js";
  import { loadChat,clearChat,saveChat,saveinvoice,loadinvoice} from "./storage.js";
- import { FINANCIAL_PROMPT,METADATA_PROMPT,VALIDATION_PROMPT,RECOMMENDATION_PROMPT,SUMMARY_PROMPT } from "./prompt.js";
+ import { FINANCIAL_PROMPT,METADATA_PROMPT,PRIORITY_PROMPT,CONSISTENCY_PROMPT,COMPLETENESS_PROMPT,RECOMMENDATION_PROMPT,SUMMARY_PROMPT,CUSTOMER_PROMPT,PAYMENT_PROMPT } from "./prompt.js";
  import { downloadResult,downloadCSV } from "./downloadresults.js";
  import { renderInvoices } from "./invoicecards.js";
  let latestResult = null;
@@ -31,7 +31,6 @@ ${content}
   });
 
   const data = await res.json();
-
   return JSON.parse(data[0].reply);
 }catch (error) {
 
@@ -67,10 +66,25 @@ const financial = await callAgent(
 
 console.log("Financial Agent:");
 console.log(financial);
+
+const customer = await callAgent(
+  CUSTOMER_PROMPT,
+  fileContent
+);
+console.log("customer Agent:");
+console.log(customer);
+const payment = await callAgent(
+  PAYMENT_PROMPT,
+  fileContent
+);
+console.log("Payment Agent:");
+console.log(payment);
 // Merge extracted invoice data
 const extractedInvoice = {
   ...metadata,
-  ...financial
+  ...financial,
+  ...customer,
+  ...payment
 };
 document.getElementById("loadingMessage")?.remove();
 console.log("Final Extraction Agent:");
@@ -81,12 +95,29 @@ chat.innerHTML += `
   </div>
 `;
 // Validation phase
-const validation = await callAgent(
-  VALIDATION_PROMPT,
-  JSON.stringify(extractedInvoice)
+const completeness = await callAgent(
+  COMPLETENESS_PROMPT,
+  fileContent
 );
-console.log("validaton Agent:");
-console.log(validation);
+console.log("completeness Agent:");
+console.log(completeness);
+const consistency = await callAgent(
+  CONSISTENCY_PROMPT,
+  fileContent
+);
+console.log("consistency Agent:");
+console.log(consistency);
+const priority = await callAgent(
+  PRIORITY_PROMPT,
+  fileContent
+);
+console.log("priority Agent:");
+console.log(priority);
+const validation = {
+  ...completeness,
+  ...consistency,
+  ...priority
+};
 document.getElementById("loadingMessage")?.remove();
 chat.innerHTML += `
   <div class="bot loading" id="loadingMessage">
