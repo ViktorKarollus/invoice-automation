@@ -256,6 +256,17 @@ Use EXACTLY this schema:
   "possible_errors": [],
   "priority": ""
 }
+  Each error must be a string.
+
+Correct:
+
+{
+  "possible_errors": [
+    "invalid_date",
+    "negative_amount"
+  ]
+}
+
 
 Examples:
 
@@ -299,6 +310,18 @@ Use EXACTLY this schema:
 
 {
   "inconsistencies": []
+}
+  IMPORTANT:
+
+Each inconsistency must be a string.
+
+Correct:
+
+{
+  "inconsistencies": [
+    "amount_discrepancy",
+    "date_discrepancy"
+  ]
 }
 
 Use concise identifiers.
