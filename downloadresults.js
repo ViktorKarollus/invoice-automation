@@ -26,13 +26,33 @@ export function downloadCSV(result) {
 
   const invoices = result.invoices;
 
-  const headers = Object.keys(invoices[0]);
+  const headers = [
+    ...Object.keys(invoices[0]),
+    "summary",
+    "recommendation"
+  ];
 
-  const rows = invoices.map(invoice =>
-    headers.map(header =>
-      JSON.stringify(invoice[header] ?? "")
-    ).join(",")
-  );
+  const rows = invoices.map(invoice => {
+
+    const rowData = {
+      ...invoice,
+      summary: result.summary,
+      recommendation: result.recommendation
+    };
+
+    return headers.map(header => {
+
+      const value = rowData[header];
+
+      if (Array.isArray(value)) {
+        return JSON.stringify(value.join("; "));
+      }
+
+      return JSON.stringify(value ?? "");
+
+    }).join(",");
+
+  });
 
   const csvContent =
     headers.join(",") + "\n" + rows.join("\n");
@@ -47,7 +67,6 @@ export function downloadCSV(result) {
   const a = document.createElement("a");
 
   a.href = url;
-
   a.download = "invoice-analysis.csv";
 
   a.click();
