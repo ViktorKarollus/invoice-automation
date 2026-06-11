@@ -1,47 +1,64 @@
-# AI Invoice Processing Agent
+# AI Invoice Processing Dashboard
 
 ## Overview
 
-The AI Invoice Processing Dashboard is a web-based application that automates the analysis of unstructured invoice data using Large Language Models (LLMs).
+The AI Invoice Processing Dashboard is a web-based application for automated invoice analysis using Large Language Models (LLMs).
 
-The system transforms raw invoice information into structured JSON, identifies missing information, detects inconsistencies and duplicates, assigns priorities, and provides export functionality for further processing.
+The system processes unstructured invoice documents and transforms them into structured JSON data. It detects missing information, identifies inconsistencies, assigns priorities, generates recommendations, and provides export functionality for further processing.
 
-The project was developed as part of a Design Science Research (DSR) seminar focusing on AI-supported process automation.
+The project was developed as part of a Design Science Research (DSR) seminar focusing on AI-supported business process automation.
 
-Without a valid VPN connection, requests to the LLM endpoint cannot be processed and invoice analysis functionality will be unavailable.
+The application uses a multi-agent divide-and-conquer architecture to improve extraction quality and enable the processing of more complex invoices.
+
+**Important:**
+The LLM endpoint is hosted within the university network. A valid VPN connection is required to access the AI services. Without VPN access, invoice analysis functionality will not be available.
+
 ---
 
 ## Features
 
-### Invoice Analysis
+### Invoice Processing
 
 * Upload unstructured invoice data
-* AI-powered invoice extraction
-* Automatic JSON and CSV generation
+* Automated invoice analysis
+* Structured JSON generation
+* CSV export
+
+### Multi-Agent Extraction
+
+The invoice analysis is split into specialized AI agents:
+
+* Metadata Agent
+* Financial Agent
+* Customer Agent
+* Payment Agent
+
+This divide-and-conquer approach reduces task complexity and improves extraction accuracy.
 
 ### Validation
 
 * Missing information detection
-* Duplicate invoice detection
 * Inconsistency detection
-* Rule-based priority assignment
+* Priority assessment
+* Invoice quality validation
+
+### AI Assistance
+
+* Automatic invoice summaries
+* Actionable recommendations
+* Risk-aware prioritization
 
 ### Dashboard
 
-* Invoice summary cards
-* Priority badges
-* Analysis log
+* Invoice cards
+* Analysis history
+* Priority indicators
+* Local data persistence
 
 ### Export
 
 * JSON export
 * CSV export
-
-### Persistence
-
-* LocalStorage support
-* Chat history persistence
-* Invoice card persistence
 
 ---
 
@@ -49,81 +66,115 @@ Without a valid VPN connection, requests to the LLM endpoint cannot be processed
 
 ```text
 File Upload
-    ↓
-Invoice Content Extraction
-    ↓
-LLM Analysis
-    ↓
-Structured JSON Output
-    ↓
+      ↓
+Invoice Parsing
+      ↓
+
+Metadata Agent
+Financial Agent
+Customer Agent
+Payment Agent
+
+      ↓
+Structured Invoice Data
+
+      ↓
+
+Completeness Validation Agent
+Consistency Validation Agent
+Priority Assessment Agent
+
+      ↓
+
+Summary Agent
+Recommendation Agent
+
+      ↓
+
 Dashboard Visualization
-    ↓
+
+      ↓
+
 JSON / CSV Export
 ```
 
 ---
 
-## JSON Schema
+## Extracted Fields
 
-The system extracts the following information:
+The system extracts the following invoice information:
 
-```json
-{
-  "summary": "",
-  "invoices": [
-    {
-      "invoice_number": "",
-      "company": "",
-      "amount": 0,
-      "currency": "",
-      "date": "",
-      "status": "",
-      "priority": "",
-      "possible_errors": [],
-      "missing_information": [],
-      "duplicates": false,
-      "inconsistencies": []
-    }
-  ]
-}
-```
+### Metadata
+
+* invoice_number
+* company
+* date
+* status
+* reference_number
+* purchase_order_number
+
+### Financial Information
+
+* amount
+* currency
+* subtotal
+* tax_amount
+* vat_rate
+
+### Customer Information
+
+* customer_name
+* customer_id
+* customer_email
+* billing_address
+
+### Payment Information
+
+* due_date
+* payment_terms
+* payment_method
+* bank_account
+
+### Validation Information
+
+* missing_information
+* inconsistencies
+* possible_errors
+* priority
 
 ---
 
-## Example Workflow
-
-### Input
-
-```text
-Company: NexaSoft Solutions
-
-Invoice Number: NS-2026-778A
-
-Date: 2026-06-03
-
-Amount: 3850 EUR
-
-Status: OPEN
-```
-
-### Output
+## Example Output
 
 ```json
 {
-  "summary": "Invoice NS-2026-778A from NexaSoft Solutions for 3850 EUR dated 2026-06-03 with OPEN status.",
+  "summary": "Open invoice NS-2026-778A from NexaSoft Solutions GmbH for 4760 EUR.",
+  "recommendation": "Review and process the invoice according to standard workflow.",
   "invoices": [
     {
       "invoice_number": "NS-2026-778A",
-      "company": "NexaSoft Solutions",
-      "amount": 3850,
-      "currency": "EUR",
+      "company": "NexaSoft Solutions GmbH",
       "date": "2026-06-03",
       "status": "OPEN",
-      "priority": "HIGH",
-      "possible_errors": [],
+      "reference_number": "REF-99821",
+      "purchase_order_number": "PO-2026-445",
+      "amount": 4760,
+      "currency": "EUR",
+      "subtotal": 4000,
+      "tax_amount": 760,
+      "vat_rate": 19,
+      "customer_name": "DigitalFlow Systems Ltd.",
+      "customer_id": "CUST-1045",
+      "customer_email": "accounting@digitalflow.com",
+      "billing_address": "12 Innovation Street, London, UK",
+      "due_date": "2026-07-03",
+      "payment_terms": "Net 30 Days",
+      "payment_method": "Bank Transfer",
+      "bank_account": "DE12345678901234567890",
       "missing_information": [],
-      "duplicates": false,
-      "inconsistencies": []
+      "inconsistencies": [],
+      "possible_errors": [],
+      "priority": "HIGH"
     }
   ]
 }
@@ -135,20 +186,17 @@ Status: OPEN
 
 * HTML5
 * CSS3
-* JavaScript 
+* JavaScript (ES6 Modules)
 * LocalStorage
 * REST API Integration
 * Large Language Models (LLMs)
 
 ---
 
-## Future Work
+## Design Science Research Contribution
 
-* Multi-file upload
-* Queue-based invoice processing
-* Dashboard statistics
-* Search and filtering
-* Database integration
-* Cloud deployment
+This project evaluates whether a divide-and-conquer multi-agent architecture can improve invoice information extraction compared to a single-prompt approach.
 
+The system separates invoice processing into multiple specialized agents responsible for extraction, validation, summarization, and recommendation generation.
 
+---
